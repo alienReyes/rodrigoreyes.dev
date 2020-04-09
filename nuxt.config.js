@@ -1,3 +1,4 @@
+import blogs from './assets/content/blogs.json'
 export default {
   mode: 'universal',
   /*
@@ -56,6 +57,9 @@ export default {
   markdownit: {
     injected: true
   },
+  generate: {
+    routes: [].concat(blogs.map((blog) => `/blog/${blog.slug}`))
+  },
   /** Build configuration
    */
   build: {
@@ -67,6 +71,10 @@ export default {
         config.module.rules.push({
           enforce: 'pre',
           test: /\.(js|vue)$/,
+          loader: 'frontmatter-markdown-loader',
+          options: {
+            vue: true
+          },
           loader: 'eslint-loader',
           exclude: /(node_modules)/
         })

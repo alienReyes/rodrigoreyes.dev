@@ -16,22 +16,39 @@
         >
       </div>
     </div>
+    <section>
+      <PostCard
+        v-for="(blog, index) in blogList"
+        :key="index"
+        :post-info="blog"
+      />
+    </section>
   </div>
 </template>
 
 <script>
-import Logo from '~/components/Logo.vue'
+// pages/index.vue
+import blogs from '~/assests/content/blogs.json'
 
 export default {
-  components: {
-    Logo
-  },
-  head() {
-    return {
-      script: [
-        { src: 'https://identity.netlify.com/v1/netlify-identity-widget.js' }
-      ]
+  async asyncData({ app }) {
+    async function awaitImport(blog) {
+      const wholeMD = await import(`~/assets/content/blog/${blog.slug}.md`)
+      return {
+        attributes: wholeMD.attributes,
+        link: blog.slug
+      }
     }
+
+    const blogList = await Promise.all(
+      blogs.map((blog) => awaitImport(blog))
+    ).then((res) => {
+      return {
+        blogList: res
+      }
+    })
+
+    return blogList
   }
 }
 </script>

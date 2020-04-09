@@ -31,7 +31,7 @@ const getFiles = (dir) => {
  * Write blogs json file
  */
 const writeBlogs = async () => {
-  const fileArray = await getFiles('content/blog/')
+  const fileArray = await getFiles('./assets/content/blog/')
 
   // Order array by date (default asc)
   const sortedArray = await fileArray.sort((a, b) => {
